@@ -9,10 +9,13 @@ from utils.id_generator import generate_unique_id
 from utils import exceptions
 from utils.decorators.authorize import is_authorize
 from django.contrib.auth.hashers import make_password
+from utils.decorators.authorize import is_authorize
 
 class RegisterView(APIView):
 
+    @is_authorize(role=['ADMIN','MANAGER'])
     def post(self,request):
+        token_data=request.token_data
         data=request.data
         user_type=data.get("user_type").lower()
 
@@ -26,9 +29,6 @@ class RegisterView(APIView):
             else:
                 return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             
-            if not Organization.objects.filter(org_id=data.get('org_id')).exists():
-                raise exceptions.NotExists(detail="Organization doesn't exists!")
-            
             if not Role.objects.filter(role_id=data.get('role_id')).exists():
                 raise exceptions.NotExists(detail="Role doesn't exists!")
             
@@ -37,7 +37,7 @@ class RegisterView(APIView):
             employee=Employee(
                 emp_id=user_id,
                 name=data.get('name'),
-                organization=Organization.objects.get(org_id=data.get('org_id')),
+                organization=Organization.objects.get(org_id=token_data.get('org_id')),
                 role=role,
                 mobile=data.get('mobile'),
                 email=data.get('email'),
@@ -64,12 +64,12 @@ class RegisterView(APIView):
             else:
                 return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             
-            if not Organization.objects.filter(org_id=data.get('org_id')).exists():
-                raise exceptions.NotExists(detail="Organization doesn't exists!")
+            if Customer.objects.filter(organization__org_id=token_data.get('org_id'),mobile=data.get('mobile')).exists() or (data.get('email') and Customer.objects.filter(organization__org_id=token_data.get('org_id'),email=data.get('email')).exists()):
+                raise exceptions.GenericException(detail="customer already exists!",code=400)
 
             customer=Customer(
                 cust_id=user_id,
-                organization=Organization.objects.get(org_id=data.get('org_id')),
+                organization=Organization.objects.get(org_id=token_data.get('org_id')),
                 name=data.get('name'),
                 mobile=data.get('mobile'),
                 email=data.get('email'),

@@ -45,3 +45,4 @@ class CustomerOutSerializer(serializers.ModelSerializer):
             'is_active',
             'updated_at'
         )
+

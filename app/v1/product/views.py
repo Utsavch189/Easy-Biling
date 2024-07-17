@@ -23,9 +23,6 @@ class ProductView(APIView):
                 code=400
             )
         
-        if not Organization.objects.filter(org_id=token_data.get('org_id')).exists():
-            raise exceptions.NotExists(detail="Organization doesn't exists!")
-        
         if 'product-type' in query_params:
             product_type=query_params['product-type']
             products=Product.objects.filter(organization__org_id=token_data.get('org_id'),types__p_type_id=product_type)
@@ -47,6 +44,7 @@ class ProductView(APIView):
 
     @is_authorize(role=['ADMIN','MANAGER'])
     def post(self,request):
+        token_data=request.token_data
         serializer=ProductInSerializer(data=request.data)
         if serializer.is_valid():
             data=serializer.validated_data
@@ -56,7 +54,7 @@ class ProductView(APIView):
             
             product=Product(
                 p_id=generate_unique_id(),
-                organization=Organization.objects.get(org_id=data.get('org_id')),
+                organization=Organization.objects.get(org_id=token_data.get('org_id')),
                 name=data.get('name'),
                 types=ProductType.objects.get(p_type_id=data.get('types')) if data.get('types') else None,
                 desc=data.get('desc'),
@@ -73,19 +71,17 @@ class ProductView(APIView):
         
     @is_authorize(role=['ADMIN','MANAGER'])
     def put(self,request):
+        token_data=request.token_data
         serializer=ProductUpdateSerializer(data=request.data)
 
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Organization.objects.filter(org_id=data.get('org_id')).exists():
-                raise exceptions.NotExists(detail="Organization doesn't exists!")
-            
             if not Product.objects.filter(p_id=data.get('p_id')).exists():
                 raise exceptions.NotExists(detail="Product doesn't exists!")
 
             product=Product.objects.get(p_id=data.get('p_id'))
-            product.organization=Organization.objects.get(org_id=data.get('org_id'))
+            product.organization=Organization.objects.get(org_id=token_data.get('org_id'))
             product.name=data.get('name')
             if data.get('types'):
                 if not ProductType.objects.filter(p_type_id=data.get('types')).exists():
@@ -134,9 +130,6 @@ class ProductTypeView(APIView):
                 code=400
             )
         
-        if not Organization.objects.filter(org_id=token_data.get('org_id')).exists():
-                raise exceptions.NotExists(detail="Organization doesn't exists!")
-        
         product_types=ProductType.objects.filter(organization__org_id=token_data.get('org_id'))
         paginator=Paginator(product_types,int(query_params['page-size']))
 
@@ -153,18 +146,16 @@ class ProductTypeView(APIView):
 
     @is_authorize(role=['ADMIN','MANAGER'])
     def post(self,request):
+        token_data=request.token_data
         serializer=ProductTypeInSerializer(data=request.data)
 
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Organization.objects.filter(org_id=data.get('org_id')).exists():
-                raise exceptions.NotExists(detail="Organization doesn't exists!")
-            
             product_type=ProductType(
                 p_type_id=generate_unique_id(),
                 name=data.get('name'),
-                organization=Organization.objects.get(org_id=data.get('org_id')),
+                organization=Organization.objects.get(org_id=token_data.get('org_id')),
                 desc=data.get('desc')
             )
             product_type.save()
@@ -176,19 +167,17 @@ class ProductTypeView(APIView):
         
     @is_authorize(role=['ADMIN','MANAGER'])
     def put(self,request):
+        token_data=request.token_data
         serializer=ProductTypeUpdateSerializer(data=request.data)
 
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Organization.objects.filter(org_id=data.get('org_id')).exists():
-                raise exceptions.NotExists(detail="Organization doesn't exists!")
-            
             if not ProductType.objects.filter(p_type_id=data.get('p_type_id')).exists():
                 raise exceptions.NotExists(detail="Product Type doesn't exists!")
 
             product_type=ProductType.objects.get(p_type_id=data.get('p_type_id'))
-            product_type.organization=Organization.objects.get(org_id=data.get('org_id'))
+            product_type.organization=Organization.objects.get(org_id=token_data.get('org_id'))
             product_type.name=data.get('name')
             product_type.desc=data.get('desc')
             product_type.is_active=data.get('is_active')

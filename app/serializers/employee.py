@@ -3,7 +3,6 @@ from app.models import Employee,TwoFactorVerification
 from app.serializers.role import RoleOutSerializer
 
 class EmployeeInSerializer(serializers.Serializer):
-    org_id=serializers.CharField()
     name=serializers.CharField()
     role_id=serializers.CharField()
     mobile=serializers.CharField()
@@ -17,7 +16,6 @@ class EmployeeInSerializer(serializers.Serializer):
 
 class EmployeeUpdateSerializer(serializers.Serializer):
     emp_id=serializers.CharField()
-    org_id=serializers.CharField()
     name=serializers.CharField()
     role_id=serializers.CharField()
     mobile=serializers.CharField()

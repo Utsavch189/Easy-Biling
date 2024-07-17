@@ -105,8 +105,8 @@ class Customer(models.Model):
     cust_id=models.CharField(max_length=255,unique=True)
     organization=models.ForeignKey(Organization,on_delete=models.CASCADE,related_name='organization_customer')
     name=models.CharField(max_length=255)
-    mobile=models.CharField(max_length=20,unique=True)
-    email=models.EmailField(max_length=100,null=True,blank=True,unique=True)
+    mobile=models.CharField(max_length=20)
+    email=models.EmailField(max_length=100,null=True,blank=True)
     registered_at=models.DateTimeField(default=datetime.now())
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)
@@ -114,16 +114,8 @@ class Customer(models.Model):
     def __str__(self) -> str:
         return self.name
     
-    def clean(self) -> None:
-        if self.email and Customer.objects.filter(email=self.email).exists() and Customer.objects.get(email=self.email).cust_id!=self.cust_id:
-            raise exceptions.GenericException(detail="email already exists!",code=400)
-        
-        if self.mobile and Customer.objects.filter(mobile=self.mobile).exists() and Customer.objects.get(mobile=self.mobile).cust_id!=self.cust_id:
-            raise exceptions.GenericException(detail="mobile number already exists!",code=400)
-    
     def save(self, *args, **kwargs):
         self.name=self.name.upper()
-        self.full_clean()
         super(Customer, self).save(*args, **kwargs)
 
 class ProductType(models.Model):

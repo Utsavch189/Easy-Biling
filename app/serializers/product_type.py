@@ -2,7 +2,6 @@ from rest_framework import serializers
 from app.models import ProductType
 
 class ProductTypeInSerializer(serializers.Serializer):
-    org_id=serializers.CharField()
     name=serializers.CharField()
     desc=serializers.CharField(required=False)
 
@@ -13,7 +12,6 @@ class ProductTypeInSerializer(serializers.Serializer):
 
 class ProductTypeUpdateSerializer(serializers.Serializer):
     p_type_id=serializers.CharField()
-    org_id=serializers.CharField()
     name=serializers.CharField()
     desc=serializers.CharField(required=False)
     is_active=serializers.BooleanField()

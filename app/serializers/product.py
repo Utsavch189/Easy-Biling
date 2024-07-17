@@ -3,7 +3,6 @@ from app.models import Product
 from app.serializers.product_type import ProductTypeOutSerializer
 
 class ProductInSerializer(serializers.Serializer):
-    org_id=serializers.CharField()
     name=serializers.CharField()
     types=serializers.CharField(required=False)
     desc=serializers.CharField(required=False)
@@ -21,7 +20,6 @@ class ProductInSerializer(serializers.Serializer):
 
 class ProductUpdateSerializer(serializers.Serializer):
     p_id=serializers.CharField()
-    org_id=serializers.CharField()
     name=serializers.CharField()
     types=serializers.CharField(required=False)
     desc=serializers.CharField()

@@ -5,7 +5,6 @@ from app.serializers.payment_modes import PaymentModeOutSerializer
 from app.serializers.order_biiling_map import BillForOrdersSerializer
 
 class BillingInSerializer(serializers.Serializer):
-    org_id=serializers.CharField()
     customer_id=serializers.CharField()
     payment_mode=serializers.CharField()
     discount=serializers.DecimalField(max_digits=10, decimal_places=2,required=False)
@@ -13,7 +12,6 @@ class BillingInSerializer(serializers.Serializer):
 
 class BillingUpdateSerializer(serializers.Serializer):
     bill_id=serializers.CharField()
-    org_id=serializers.CharField()
     customer_id=serializers.CharField()
     payment_mode=serializers.CharField()
     discount=serializers.DecimalField(max_digits=10, decimal_places=2)

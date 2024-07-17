@@ -20,19 +20,17 @@ class EmployeeView(APIView):
         
     @is_authorize()
     def put(self,request):
+        token_data=request.token_data
         serializer=EmployeeUpdateSerializer(data=request.data)
 
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Organization.objects.filter(org_id=data.get('org_id')).exists():
-                raise exceptions.NotExists(detail="Organization doesn't exists!")
-            
             if not Role.objects.filter(role_id=data.get('role_id')).exists():
                 raise exceptions.NotExists(detail="Role doesn't exists!")
             
             employee=Employee.objects.get(emp_id=data.get('emp_id'))
-            employee.organization=Organization.objects.get(org_id=data.get('org_id'))
+            employee.organization=Organization.objects.get(org_id=token_data.get('org_id'))
             employee.role=Role.objects.get(role_id=data.get('role_id'))
             employee.name=data.get('name')
             employee.mobile=data.get('mobile')
