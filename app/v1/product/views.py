@@ -17,6 +17,17 @@ class ProductView(APIView):
         token_data=request.token_data
         query_params=request.query_params
 
+        if 'product-id' in query_params:
+
+            try:
+                product=Product.objects.get(p_id=query_params['order-id'])
+            except Product.DoesNotExist:
+                raise exceptions.NotExists(detail="product doesn't exists!")
+            
+            data=ProductOutSerializer(instance=product).data
+
+            return Response({"product":data},status=status.HTTP_200_OK)
+
         if not ('page-size' in query_params and 'page' in query_params):
             raise exceptions.GenericException(
                 detail="pass page and page-size in query params!",
@@ -48,15 +59,25 @@ class ProductView(APIView):
         serializer=ProductInSerializer(data=request.data)
         if serializer.is_valid():
             data=serializer.validated_data
-
-            if not Organization.objects.filter(org_id=data.get('org_id')).exists():
+            
+            try:
+                organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            except Organization.DoesNotExist:
                 raise exceptions.NotExists(detail="Organization doesn't exists!")
+
+            if data.get('types'):
+                try:
+                    product_type=ProductType.objects.get(p_type_id=data.get('types'))
+                except ProductType.DoesNotExist:
+                    raise exceptions.NotExists(detail="product type doesn't exists!")
+            else:
+                product_type=None
             
             product=Product(
                 p_id=generate_unique_id(),
-                organization=Organization.objects.get(org_id=token_data.get('org_id')),
+                organization=organization,
                 name=data.get('name'),
-                types=ProductType.objects.get(p_type_id=data.get('types')) if data.get('types') else None,
+                types=product_type,
                 desc=data.get('desc'),
                 price=data.get('price'),
                 discount=data.get('discount')
@@ -77,16 +98,28 @@ class ProductView(APIView):
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Product.objects.filter(p_id=data.get('p_id')).exists():
+            try:
+                product=Product.objects.get(p_id=data.get('p_id'))
+            except Product.DoesNotExist:
                 raise exceptions.NotExists(detail="Product doesn't exists!")
 
-            product=Product.objects.get(p_id=data.get('p_id'))
-            product.organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            try:
+                organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            except Organization.DoesNotExist:
+                raise exceptions.NotExists(detail="Organization doesn't exists!")
+            
+            product.organization=organization
             product.name=data.get('name')
+
             if data.get('types'):
-                if not ProductType.objects.filter(p_type_id=data.get('types')).exists():
-                    raise exceptions.NotExists(detail="Product Type doesn't exists!")
-                product.types=ProductType.objects.get(p_type_id=data.get('types'))
+                try:
+                    product_type=ProductType.objects.get(p_type_id=data.get('types'))
+                except ProductType.DoesNotExist:
+                    raise exceptions.NotExists(detail="product type doesn't exists!")
+            else:
+                product_type=None
+            
+            product.types=product_type
             product.desc=data.get('desc')
             product.price=data.get('price')
             product.discount=data.get('discount')
@@ -106,10 +139,11 @@ class ProductView(APIView):
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Product.objects.filter(p_id=data.get('p_id')).exists():
+            try:
+                product=Product.objects.get(p_id=data.get('p_id'))
+            except Product.DoesNotExist:
                 raise exceptions.NotExists(detail="Product doesn't exists!")
             
-            product=Product.objects.get(p_id=data.get('p_id'))
             name=product.name
             product.delete()
             return Response({"message":f"Product {name} is deleted!"},status=status.HTTP_200_OK)
@@ -123,6 +157,7 @@ class ProductTypeView(APIView):
     def get(self,request):
         token_data=request.token_data
         query_params=request.query_params
+        
 
         if not ('page-size' in query_params and 'page' in query_params):
             raise exceptions.GenericException(
@@ -152,10 +187,15 @@ class ProductTypeView(APIView):
         if serializer.is_valid():
             data=serializer.validated_data
 
+            try:
+                organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            except Organization.DoesNotExist:
+                raise exceptions.NotExists(detail="Organization doesn't exists!")
+
             product_type=ProductType(
                 p_type_id=generate_unique_id(),
                 name=data.get('name'),
-                organization=Organization.objects.get(org_id=token_data.get('org_id')),
+                organization=organization,
                 desc=data.get('desc')
             )
             product_type.save()
@@ -173,11 +213,17 @@ class ProductTypeView(APIView):
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not ProductType.objects.filter(p_type_id=data.get('p_type_id')).exists():
+            try:
+                product_type=ProductType.objects.get(p_type_id=data.get('p_type_id'))
+            except Product.DoesNotExist:
                 raise exceptions.NotExists(detail="Product Type doesn't exists!")
+            
+            try:
+                organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            except Organization.DoesNotExist:
+                raise exceptions.NotExists(detail="Organization doesn't exists!")
 
-            product_type=ProductType.objects.get(p_type_id=data.get('p_type_id'))
-            product_type.organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            product_type.organization=organization
             product_type.name=data.get('name')
             product_type.desc=data.get('desc')
             product_type.is_active=data.get('is_active')
@@ -195,10 +241,11 @@ class ProductTypeView(APIView):
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not ProductType.objects.filter(p_type_id=data.get('p_type_id')).exists():
+            try:
+                product_type=ProductType.objects.get(p_type_id=data.get('p_type_id'))
+            except Product.DoesNotExist:
                 raise exceptions.NotExists(detail="Product Type doesn't exists!")
             
-            product_type=ProductType.objects.get(p_type_id=data.get('p_type_id'))
             name=product_type.name
             product_type.delete()
             return Response({"message":f"Product Type {name} is deleted!"},status=status.HTTP_200_OK)

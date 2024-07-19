@@ -28,16 +28,21 @@ class RegisterView(APIView):
                 data=serializer.validated_data
             else:
                 return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-            
-            if not Role.objects.filter(role_id=data.get('role_id')).exists():
+
+            try:
+                role=Role.objects.get(role_id=data.get('role_id'))
+            except Role.DoesNotExist:
                 raise exceptions.NotExists(detail="Role doesn't exists!")
             
-            role=Role.objects.get(role_id=data.get('role_id'))
+            try:
+                organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            except Organization.DoesNotExist:
+                raise exceptions.NotExists(detail="organization doesn't exists!")
             
             employee=Employee(
                 emp_id=user_id,
                 name=data.get('name'),
-                organization=Organization.objects.get(org_id=token_data.get('org_id')),
+                organization=organization,
                 role=role,
                 mobile=data.get('mobile'),
                 email=data.get('email'),
@@ -129,10 +134,9 @@ class RefreshTokenView(APIView):
 
         if user_type=="employee":
 
-            if Employee.objects.filter(emp_id=user_id).exists():
+            try:
                 employee=Employee.objects.get(emp_id=user_id)
-            
-            else:
+            except Employee.DoesNotExist:
                 raise exceptions.NotExists(detail="user doesn't exists!")
             
             jwt_payload={

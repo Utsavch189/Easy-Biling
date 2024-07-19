@@ -13,10 +13,11 @@ class OTPSendView(APIView):
         user_type=data.get('user_type',None)
 
         if user_type.lower()=="employee":
-            if not Employee.objects.filter(email=email).exists():
-                raise exceptions.NotExists(detail="Invalid Email!")
-            
-            user=Employee.objects.get(email=email)
+
+            try:
+                user=Employee.objects.get(email=email)
+            except Employee.DoesNotExist:
+                raise exceptions.NotExists(detail="No user found!")
 
         OTPSender.send(
             to=email,
@@ -36,10 +37,12 @@ class OTPVerifyView(APIView):
         user_type=data.get('user_type',None)
 
         if user_type.lower()=="employee":
-            if not Employee.objects.filter(email=email).exists():
-                raise exceptions.NotExists(detail="Invalid Email!")
 
-            user=Employee.objects.get(email=email)
+            try:
+                user=Employee.objects.get(email=email)
+            except Employee.DoesNotExist:
+                raise exceptions.NotExists(detail="No user found!")
+            
             user_id=user.emp_id
 
         sts,message=OTPSender.verify(

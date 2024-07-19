@@ -14,10 +14,12 @@ class TwoFactorCreateView(APIView):
         user_type=data.get('user_type',None)
 
         if user_type.lower()=='employee':
-            if not Employee.objects.filter(emp_id=user_id).exists():
+
+            try:
+                employee=Employee.objects.get(emp_id=user_id)
+            except Employee.DoesNotExist:
                 raise exceptions.NotExists(detail="User doesn't exists!")
             
-            employee=Employee.objects.get(emp_id=user_id)
             GenerateQr.generate(
                 username=employee.name,
                 user_id=user_id
@@ -35,10 +37,12 @@ class TwoFactorVerifyView(APIView):
         otp=data.get('otp',None)
 
         if user_type.lower()=='employee':
-            if not Employee.objects.filter(emp_id=user_id).exists():
+
+            try:
+                employee=Employee.objects.get(emp_id=user_id)
+            except Employee.DoesNotExist:
                 raise exceptions.NotExists(detail="User doesn't exists!")
             
-            employee=Employee.objects.get(emp_id=user_id)
             otp_obj=TwoFactorOTP(user_id)
 
             if not otp_obj.verify(

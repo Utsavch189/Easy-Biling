@@ -178,6 +178,14 @@ class Order(models.Model):
     def __str__(self) -> str:
         return f"Product : {self.product.name} for Customer : {self.customer.name}"
 
+class GSTRates(models.Model):
+    cgst=models.DecimalField(max_digits=10, decimal_places=2)
+    sgst=models.DecimalField(max_digits=10, decimal_places=2)
+    igst=models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self) -> str:
+        return f"cgst : {self.cgst} , sgst : {self.sgst} , igst : {self.igst}"
+
 class Billing(models.Model):
     bill_id=models.CharField(max_length=255,unique=True)
     organization=models.ForeignKey(Organization,on_delete=models.CASCADE,related_name='organization_billing')
@@ -187,6 +195,14 @@ class Billing(models.Model):
     discount=models.DecimalField(max_digits=10, decimal_places=2,default=0,null=True,blank=True)
     total_amount=models.DecimalField(max_digits=10, decimal_places=2)
     discounted_price=models.DecimalField(max_digits=10, decimal_places=2,default=0,null=True,blank=True)
+    cgst_amount=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    sgst_amount=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    igst_amount=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    cgst_rates=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    sgst_rates=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    igst_rates=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    is_inter_state = models.BooleanField(default=False, help_text="Is this an inter-state transaction?")
+    taxable_amount=models.DecimalField(max_digits=10, decimal_places=2,default=0)
     billing_date=models.DateTimeField(default=datetime.now())
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)

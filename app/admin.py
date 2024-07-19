@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (SystemAdmin,OTP,Organization,Employee,Role,PaymentMode,
                      Customer,Product,Order,Billing,AccessLog,ErrorLog,
-                     TwoFactorVerification,ProductType,OrderMapToBilling)
+                     TwoFactorVerification,ProductType,OrderMapToBilling,GSTRates)
 
 admin.site.register(SystemAdmin)
 admin.site.register(OTP)
@@ -15,6 +15,7 @@ admin.site.register(ProductType)
 admin.site.register(Product)
 admin.site.register(Order)
 admin.site.register(Billing)
+admin.site.register(GSTRates)
 admin.site.register(OrderMapToBilling)
 admin.site.register(AccessLog)
 admin.site.register(ErrorLog)

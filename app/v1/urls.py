@@ -9,6 +9,8 @@ from app.v1.auths.views import (
 from app.v1.otp.views import OTPSendView,OTPVerifyView
 from app.v1.two_factor_verify.views import TwoFactorCreateView,TwoFactorVerifyView
 from app.v1.product.views import ProductView,ProductTypeView
+from app.v1.order.views import OrderView
+from app.v1.billing.views import BillingView
 
 urlpatterns=[
     path('employee',EmployeeView.as_view()),
@@ -22,5 +24,7 @@ urlpatterns=[
     path('2fa/create',TwoFactorCreateView.as_view()),
     path('2fa/verify',TwoFactorVerifyView.as_view()),
     path('product',ProductView.as_view()),
-    path('product-type',ProductTypeView.as_view())
+    path('product-type',ProductTypeView.as_view()),
+    path('order',OrderView.as_view()),
+    path('billing',BillingView.as_view())
 ]

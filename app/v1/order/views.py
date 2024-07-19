@@ -17,6 +17,17 @@ class OrderView(APIView):
         token_data=request.token_data
         query_params=request.query_params
 
+        if 'order-id' in query_params:
+
+            try:
+                order=Order.objects.get(order_id=query_params['order-id'])
+            except Order.DoesNotExist:
+                raise exceptions.NotExists(detail="order doesn't exists!")
+            
+            data=OrderOutSerializer(instance=order).data
+
+            return Response({"order":data},status=status.HTTP_200_OK)
+
         if not ('page-size' in query_params and 'page' in query_params):
             raise exceptions.GenericException(
                 detail="pass page and page-size in query params!",
@@ -44,7 +55,7 @@ class OrderView(APIView):
     @is_authorize(role=['ADMIN','MANAGER'])
     def post(self,request):
         token_data=request.token_data
-        serializer=OrderOutSerializer(data=request.data,many=True)
+        serializer=OrderInSerializer(data=request.data,many=True)
 
         if serializer.is_valid():
             data=serializer.validated_data
@@ -52,24 +63,30 @@ class OrderView(APIView):
             with transaction.atomic():
                 for _order in data:
 
-                    if not Customer.objects.filter(organization__org_id=token_data.get('org_id'),mobile=_order.get('customer_phone')).exists():
-                        raise exceptions.NotExists(detail="customer doesn't exists!")
+                    try:
+                        product=Product.objects.get(p_id=_order.get('product_id'))
+                    except Product.DoesNotExist:
+                        raise exceptions.NotExists(detail="Product doesn't exists!")
+                    
+                    customer_phone=_order.get('customer_phone',None)
+                    customer_id=_order.get('customer_id',None)
+                    org_id=token_data.get('org_id',None)
 
-                    if not Product.objects.filter(p_id=data.get('product_id')).exists():
-                        raise exceptions.NotExists(detail="product doesn't exists!")
-
-                    if _order.get('customer_phone'):
-                        customer=Customer.objects.filter(organization__org_id=token_data.get('org_id'),mobile=_order.get('customer_phone'))[0]
-                    elif _order.get('customer_id'):
-                        customer=Customer.objects.get(cust_id=_order.get('customer_id'))
-                    else:
-                        raise exceptions.Unprocessable(detail="customer phone no or id must be provided!")
-
+                    try:
+                        if customer_phone:
+                            customer = Customer.objects.get(organization__org_id=org_id, mobile=customer_phone)
+                        elif customer_id:
+                            customer = Customer.objects.get(organization__org_id=org_id, cust_id=customer_id)
+                        else:
+                            raise exceptions.Unprocessable(detail="customer phone no or id must be provided!")
+                    except Customer.DoesNotExist:
+                        raise exceptions.NotExists(detail="customer doesn't exist!")
+                    
                     order=Order(
                         order_id=generate_unique_id(),
                         organization=Organization.objects.get(org_id=token_data.get('org_id')),
                         customer=customer,
-                        product=Product.objects.get(p_id=_order.get('product_id')),
+                        product=product,
                         quantity=_order.get('quantity')
                     )
                     order.save()
@@ -84,29 +101,33 @@ class OrderView(APIView):
     @is_authorize(role=['ADMIN','MANAGER'])
     def put(self,request):
         token_data=request.token_data
-        serializer=OrderUpdateSerializer(data=request.data,many=True)
+        serializer=OrderUpdateSerializer(data=request.data)
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Order.objects.filter(order_id=data.get('order_id')).exists():
+            try:
+                order=Order.objects.get(order_id=data.get('order_id'))
+            except Order.DoesNotExist:
                 raise exceptions.NotExists(detail="Order doesn't exists!")
+            
+            customer_phone=data.get('customer_phone',None)
+            customer_id=data.get('customer_id',None)
+            org_id=token_data.get('org_id',None)
+                    
+            try:
+                if customer_phone:
+                    customer = Customer.objects.get(organization__org_id=org_id, mobile=customer_phone)
+                elif customer_id:
+                    customer = Customer.objects.get(organization__org_id=org_id, cust_id=customer_id)
+                else:
+                    raise exceptions.Unprocessable(detail="customer phone no or id must be provided!")
+            except Customer.DoesNotExist:
+                raise exceptions.NotExists(detail="customer doesn't exist!")
 
-            order=Order.objects.get(order_id=data.get('order_id'))
-            
-            if not Customer.objects.filter(organization__org_id=token_data.get('org_id'),mobile=data.get('customer_phone')).exists():
-                raise exceptions.NotExists(detail="customer doesn't exists!")
-            
-            if not Product.objects.filter(p_id=data.get('product_id')).exists():
-                raise exceptions.NotExists(detail="product doesn't exists!")
-
-            if data.get('customer_phone'):
-                customer=Customer.objects.filter(organization__org_id=token_data.get('org_id'),mobile=data.get('customer_phone'))[0]
-            elif data.get('customer_id'):
-                customer=Customer.objects.get(cust_id=data.get('customer_id'))
-            else:
-                raise exceptions.Unprocessable(detail="customer phone no or id must be provided!")
-            
-            product=Product.objects.get(p_id=data.get('product_id'))
+            try:
+                product=Product.objects.get(p_id=data.get('product_id'))
+            except Product.DoesNotExist:
+                raise exceptions.NotExists(detail="Product doesn't exists!")
 
             order.customer=customer
             order.product=product
@@ -123,14 +144,15 @@ class OrderView(APIView):
     @is_authorize(role=['ADMIN','MANAGER'])
     def delete(self,request):
         token_data=request.token_data
-        serializer=OrderDeleteSerializer(data=request.data,many=True)
+        serializer=OrderDeleteSerializer(data=request.data)
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Order.objects.filter(order_id=data.get('order_id')).exists():
+            try:
+                order=Order.objects.get(order_id=data.get('order_id'))
+            except Order.DoesNotExist:
                 raise exceptions.NotExists(detail="Order doesn't exists!")
             
-            order=Order.objects.get(order_id=data.get('order_id'))
             order.delete()
             return Response({"message":"order is deleted!"},status=status.HTTP_200_OK)
         else:

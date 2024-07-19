@@ -49,3 +49,19 @@ class OrderOutSerializer(serializers.ModelSerializer):
             'is_active',
             'updated_at'
         )
+
+class OrderOutWithoutCustSerializer(serializers.ModelSerializer):
+
+    product=ProductOutSerializer()
+
+    class Meta:
+        model=Order
+        fields=(
+            'order_id',
+            'organization',
+            'product',
+            'quantity',
+            'order_date',
+            'is_active',
+            'updated_at'
+        )

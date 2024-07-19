@@ -26,12 +26,23 @@ class EmployeeView(APIView):
         if serializer.is_valid():
             data=serializer.validated_data
 
-            if not Role.objects.filter(role_id=data.get('role_id')).exists():
+            try:
+                role=Role.objects.get(role_id=data.get('role_id'))
+            except Role.DoesNotExist:
                 raise exceptions.NotExists(detail="Role doesn't exists!")
             
-            employee=Employee.objects.get(emp_id=data.get('emp_id'))
-            employee.organization=Organization.objects.get(org_id=token_data.get('org_id'))
-            employee.role=Role.objects.get(role_id=data.get('role_id'))
+            try:
+                organization=Organization.objects.get(org_id=token_data.get('org_id'))
+            except Organization.DoesNotExist:
+                raise exceptions.NotExists(detail="organization doesn't exists!")
+            
+            try:
+                employee=Employee.objects.get(emp_id=data.get('emp_id'))
+            except Employee.DoesNotExist:
+                raise exceptions.NotExists(detail="user doesn't exists!")
+            
+            employee.organization=organization
+            employee.role=role
             employee.name=data.get('name')
             employee.mobile=data.get('mobile')
             employee.email=data.get('email')
@@ -48,7 +59,10 @@ class EmployeeView(APIView):
         serializer=EmployeeDeleteSerializer(data=request.data)
         if serializer.is_valid():
             data=serializer.validated_data
-            employee=Employee.objects.get(emp_id=data.get('emp_id'))
+            try:
+                employee=Employee.objects.get(emp_id=data.get('emp_id'))
+            except Employee.DoesNotExist:
+                raise exceptions.NotExists(detail="user doesn't exists!")
             name=employee.name
             employee.delete()
             return Response({"message":f"Employee {name} is deleted!"},status=status.HTTP_200_OK)

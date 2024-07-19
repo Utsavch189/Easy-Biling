@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from app.models import Customer
-from app.serializers.order import OrderOutSerializer
+from app.serializers.order import OrderOutSerializer,OrderOutWithoutCustSerializer
 from app.serializers.billing import BillingOutSerializer
 
 class CustomerInSerializer(serializers.Serializer):
@@ -29,7 +29,7 @@ class CustomerUpdateSerializer(serializers.Serializer):
 
 class CustomerOutSerializer(serializers.ModelSerializer):
 
-    orders=OrderOutSerializer(many=True,source='customer_order')
+    orders=OrderOutWithoutCustSerializer(many=True,source='customer_order')
     billings=BillingOutSerializer(many=True,source='customer_billing')
 
     class Meta:
