@@ -8,7 +8,7 @@ from utils import exceptions
 from django.db import transaction
 from .invoice_generate import Invoice
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
-from app.serializers.billing import BillingInSerializer,BillingOutWithCustSerializer,BillingUpdateSerializer,BillingDeleteSerializer
+from app.serializers.billing import BillingInSerializer,BillingOutWithCustSerializer,BillingDeleteSerializer
 
 class BillingView(APIView):
 

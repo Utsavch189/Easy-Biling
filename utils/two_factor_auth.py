@@ -31,7 +31,7 @@ class GenerateQr:
                 qr.save(bio)
                 qr_bytes = bio.getvalue()
 
-            file_path=f'media/qr_{user_id}.png'
+            file_path=f'media/qr/qr_{user_id}.png'
 
             with open(file_path,'wb') as q:
                 q.write(qr_bytes)
