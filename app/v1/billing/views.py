@@ -6,7 +6,7 @@ from app.models import Order,PaymentMode,Customer,Organization,Billing,OrderMapT
 from utils.id_generator import generate_unique_id
 from utils import exceptions
 from django.db import transaction
-from datetime import datetime
+from .invoice_generate import Invoice
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from app.serializers.billing import BillingInSerializer,BillingOutWithCustSerializer,BillingUpdateSerializer,BillingDeleteSerializer
 
@@ -124,8 +124,10 @@ class BillingView(APIView):
                     # Calculate total amount including CGST and SGST
                     total_amount_incl_gst = discounted_price + cgst_amount + sgst_amount
 
+                bill_id=generate_unique_id()
+
                 bill=Billing(
-                    bill_id=generate_unique_id(),
+                    bill_id=bill_id,
                     organization=organization,
                     billed_by=billed_by,
                     customer=customer,
@@ -142,6 +144,14 @@ class BillingView(APIView):
                     is_inter_state=data.get('is_inter_state'),
                     taxable_amount=total_amount_incl_gst
                 )
+                invoice=Invoice(
+                    template_name='invoice.html',
+                    to=customer.email,
+                    name=customer.name
+                )
+                invoice_path,invoice_id=invoice.generate(bill=bill,orders=orders)
+                bill.invoice=invoice_id
+                bill.invoice_path=invoice_path
                 bill.save()
 
                 for order in orders:
@@ -149,6 +159,7 @@ class BillingView(APIView):
                         order=order,
                         billing=bill
                     )
+                
             data=BillingOutWithCustSerializer(instance=bill,many=False).data
             return Response({"billing":data},status=status.HTTP_201_CREATED)
         else:

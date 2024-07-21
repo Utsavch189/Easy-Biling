@@ -78,6 +78,7 @@ class RegisterView(APIView):
                 name=data.get('name'),
                 mobile=data.get('mobile'),
                 email=data.get('email'),
+                address=data.get('address')
             )
 
             customer.save()

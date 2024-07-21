@@ -107,6 +107,7 @@ class Customer(models.Model):
     name=models.CharField(max_length=255)
     mobile=models.CharField(max_length=20)
     email=models.EmailField(max_length=100,null=True,blank=True)
+    address=models.CharField(max_length=255,null=True,blank=True,default="")
     registered_at=models.DateTimeField(default=datetime.now())
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)
@@ -188,6 +189,8 @@ class GSTRates(models.Model):
 
 class Billing(models.Model):
     bill_id=models.CharField(max_length=255,unique=True)
+    invoice=models.CharField(max_length=255,default="")
+    invoice_path=models.CharField(max_length=255,default="")
     organization=models.ForeignKey(Organization,on_delete=models.CASCADE,related_name='organization_billing')
     billed_by=models.ForeignKey(Employee,on_delete=models.DO_NOTHING,related_name='employee_billing')
     customer=models.ForeignKey(Customer,on_delete=models.DO_NOTHING,related_name='customer_billing')

@@ -54,6 +54,8 @@ class BillingOutSerializer(serializers.ModelSerializer):
         model=Billing
         fields=(
             'bill_id',
+            'invoice',
+            'invoice_path',
             'organization',
             'billed_by',
             'payment_mode',
@@ -85,6 +87,8 @@ class BillingOutWithCustSerializer(serializers.ModelSerializer):
         model=Billing
         fields=(
             'bill_id',
+            'invoice',
+            'invoice_path',
             'organization',
             'billed_by',
             'customer',

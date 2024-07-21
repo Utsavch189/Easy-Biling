@@ -8,10 +8,13 @@ class CustomerInSerializer(serializers.Serializer):
     name=serializers.CharField()
     mobile=serializers.CharField()
     email=serializers.EmailField(required=False)
+    address=serializers.CharField(required=False)
 
     def validate(self, data):
         if not data.get('email'):
             data['email']=""
+        if not data.get('address'):
+            data['address']=""
         return data
 
 class CustomerUpdateSerializer(serializers.Serializer):
@@ -39,6 +42,7 @@ class CustomerOutSerializer(serializers.ModelSerializer):
             'name',
             'mobile',
             'email',
+            'address',
             'registered_at',
             'orders',
             'billings',
