@@ -11,6 +11,8 @@ from app.v1.two_factor_verify.views import TwoFactorCreateView,TwoFactorVerifyVi
 from app.v1.product.views import ProductView,ProductTypeView
 from app.v1.order.views import OrderView
 from app.v1.billing.views import BillingView
+from app.v1.customer.views import CustomerView
+from app.v1.me.views import MeView
 
 urlpatterns=[
     path('employee',EmployeeView.as_view()),
@@ -25,5 +27,7 @@ urlpatterns=[
     path('product',ProductView.as_view()),
     path('product-type',ProductTypeView.as_view()),
     path('order',OrderView.as_view()),
-    path('billing',BillingView.as_view())
+    path('billing',BillingView.as_view()),
+    path('customer',CustomerView.as_view()),
+    path('me',MeView.as_view())
 ]

@@ -20,7 +20,6 @@ class EmployeeUpdateSerializer(serializers.Serializer):
     role_id=serializers.CharField()
     mobile=serializers.CharField()
     email=serializers.EmailField()
-    is_active=serializers.BooleanField()
 
     def validate(self, data):
         if not data.get('email'):

@@ -23,12 +23,14 @@ class CustomerUpdateSerializer(serializers.Serializer):
     name=serializers.CharField()
     mobile=serializers.CharField()
     email=serializers.EmailField(required=False)
-    is_active=serializers.BooleanField()
 
     def validate(self, data):
         if not data.get('email'):
             data['email']=""
         return data
+
+class CustomerDeleteSerializer(serializers.Serializer):
+    cust_id=serializers.CharField()
 
 class CustomerOutSerializer(serializers.ModelSerializer):
 
@@ -39,6 +41,7 @@ class CustomerOutSerializer(serializers.ModelSerializer):
         model=Customer
         fields=(
             'cust_id',
+            'organization',
             'name',
             'mobile',
             'email',

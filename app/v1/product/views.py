@@ -123,7 +123,6 @@ class ProductView(APIView):
             product.desc=data.get('desc')
             product.price=data.get('price')
             product.discount=data.get('discount')
-            product.is_active=data.get('is_active')
             product.is_available=data.get('is_available')
             product.updated_at=datetime.now()
             product.save()
@@ -146,7 +145,7 @@ class ProductView(APIView):
             
             product.is_active=False
             product.save()
-            return Response({"message":f"Product {product.name} is deleted!"},status=status.HTTP_200_OK)
+            return Response({"message":f"Product {product.name} is deleted!","id":product.p_id},status=status.HTTP_200_OK)
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
@@ -226,7 +225,6 @@ class ProductTypeView(APIView):
             product_type.organization=organization
             product_type.name=data.get('name')
             product_type.desc=data.get('desc')
-            product_type.is_active=data.get('is_active')
             product_type.updated_at=datetime.now()
             product_type.save()
 
@@ -248,6 +246,6 @@ class ProductTypeView(APIView):
             
             product_type.is_active=False
             product_type.save()
-            return Response({"message":f"Product Type {product_type.name} is deleted!"},status=status.HTTP_200_OK)
+            return Response({"message":f"Product Type {product_type.name} is deleted!","id":product_type.p_type_id},status=status.HTTP_200_OK)
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)

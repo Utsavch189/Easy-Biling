@@ -22,6 +22,11 @@ class RegisterView(APIView):
         user_id=generate_unique_id()
         tokens={}
 
+        try:
+            organization=Organization.objects.get(org_id=token_data.get('org_id'))
+        except Organization.DoesNotExist:
+            raise exceptions.NotExists(detail="organization doesn't exists!")
+
         if user_type=="employee":
             serializer=EmployeeInSerializer(data=data)
             if serializer.is_valid():
@@ -34,10 +39,6 @@ class RegisterView(APIView):
             except Role.DoesNotExist:
                 raise exceptions.NotExists(detail="Role doesn't exists!")
             
-            try:
-                organization=Organization.objects.get(org_id=token_data.get('org_id'))
-            except Organization.DoesNotExist:
-                raise exceptions.NotExists(detail="organization doesn't exists!")
             
             employee=Employee(
                 emp_id=user_id,
@@ -56,7 +57,7 @@ class RegisterView(APIView):
                 "user_id":user_id,
                 "role":role.name,
                 "user_type":"employee",
-                "org_id":employee.organization.org_id,
+                "org_id":organization.org_id,
                 "is_verified":False
             }
 
@@ -74,7 +75,7 @@ class RegisterView(APIView):
 
             customer=Customer(
                 cust_id=user_id,
-                organization=Organization.objects.get(org_id=token_data.get('org_id')),
+                organization=organization,
                 name=data.get('name'),
                 mobile=data.get('mobile'),
                 email=data.get('email'),

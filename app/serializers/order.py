@@ -27,7 +27,6 @@ class OrderUpdateSerializer(serializers.Serializer):
     customer_phone=serializers.CharField(required=False)
     product_id=serializers.CharField()
     quantity=serializers.IntegerField()
-    is_active=serializers.BooleanField()
 
 class OrderDeleteSerializer(serializers.Serializer):
     order_id=serializers.CharField()

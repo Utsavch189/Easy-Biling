@@ -14,7 +14,6 @@ class ProductTypeUpdateSerializer(serializers.Serializer):
     p_type_id=serializers.CharField()
     name=serializers.CharField()
     desc=serializers.CharField(required=False)
-    is_active=serializers.BooleanField()
 
 
 class ProductTypeDeleteSerializer(serializers.Serializer):

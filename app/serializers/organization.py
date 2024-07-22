@@ -20,7 +20,6 @@ class OrganizationUpdateSerializer(serializers.Serializer):
     address=serializers.CharField()
     mobile=serializers.CharField()
     email=serializers.EmailField()
-    is_active=serializers.BooleanField()
 
     def validate(self, attrs):
         if not attrs.get('email'):

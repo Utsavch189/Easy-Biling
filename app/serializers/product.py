@@ -26,7 +26,6 @@ class ProductUpdateSerializer(serializers.Serializer):
     price=serializers.DecimalField(max_digits=10, decimal_places=2)
     discount=serializers.DecimalField(max_digits=10, decimal_places=2,required=False)
     is_available=serializers.BooleanField()
-    is_active=serializers.BooleanField()
 
 
 class ProductDeleteSerializer(serializers.Serializer):

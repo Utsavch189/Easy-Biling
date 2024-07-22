@@ -132,7 +132,6 @@ class OrderView(APIView):
             order.customer=customer
             order.product=product
             order.quantity=data.get('quantity')
-            order.is_active=data.get('is_active')
             order.updated_at=datetime.now()
             order.save()
 

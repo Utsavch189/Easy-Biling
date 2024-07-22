@@ -39,7 +39,6 @@ class BillingUpdateSerializer(serializers.Serializer):
     discount=serializers.DecimalField(max_digits=10, decimal_places=2)
     total_amount=serializers.DecimalField(max_digits=10, decimal_places=2)
     discounted_price=serializers.DecimalField(max_digits=10, decimal_places=2)
-    is_active=serializers.BooleanField()
 
 class BillingDeleteSerializer(serializers.Serializer):
     bill_id=serializers.CharField()

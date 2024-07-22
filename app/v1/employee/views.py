@@ -17,7 +17,7 @@ class EmployeeView(APIView):
 
         if 'employee-id' in query_params:
             try:
-                employee=Employee.objects.get(emp_id=token_data.get('user_id'))
+                employee=Employee.objects.get(emp_id=query_params['employee-id'])
             except Employee.DoesNotExist:
                 raise exceptions.NotExists(detail="employee doesn't exists!")
             
@@ -89,8 +89,8 @@ class EmployeeView(APIView):
                 employee=Employee.objects.get(emp_id=data.get('emp_id'))
             except Employee.DoesNotExist:
                 raise exceptions.NotExists(detail="user doesn't exists!")
-            name=employee.name
-            employee.delete()
-            return Response({"message":f"Employee {name} is deleted!"},status=status.HTTP_200_OK)
+            employee.is_active=False
+            employee.save()
+            return Response({"message":f"Employee {employee.name} is deleted!","id":employee.emp_id},status=status.HTTP_200_OK)
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)
