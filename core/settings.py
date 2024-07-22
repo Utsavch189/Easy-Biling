@@ -63,6 +63,9 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser'
     ],
     'EXCEPTION_HANDLER': 'utils.rest_global_exception.custom_exception_handler',
+    'DEFAULT_THROTTLE_RATES': {
+        'rate': '1/minute'
+    }
     
 }
 

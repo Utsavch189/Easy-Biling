@@ -9,8 +9,13 @@ from django.db import transaction
 from .invoice_generate import Invoice
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from app.serializers.billing import BillingInSerializer,BillingOutWithCustSerializer,BillingDeleteSerializer
+from rest_framework.throttling import ScopedRateThrottle
+
 
 class BillingView(APIView):
+
+    # throttle_classes = [ScopedRateThrottle]
+    # throttle_scope = 'rate'
 
     @is_authorize(role=['ADMIN','MANAGER'])
     def get(self,request):

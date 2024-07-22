@@ -9,7 +9,7 @@ from utils.id_generator import generate_unique_id
 
 def get_response(exc):
     if isinstance(exc,APIException):
-        return Response(data={"message":str(exc)},status=exc.get_codes())
+        return Response(data={"message":str(exc)},status=exc.status_code)
     return Response(data={"message":str(exc)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def error_log(exc,context):
