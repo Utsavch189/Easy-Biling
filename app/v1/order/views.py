@@ -153,7 +153,8 @@ class OrderView(APIView):
             except Order.DoesNotExist:
                 raise exceptions.NotExists(detail="Order doesn't exists!")
             
-            order.delete()
-            return Response({"message":"order is deleted!"},status=status.HTTP_200_OK)
+            order.is_active=False
+            order.save()
+            return Response({"message":"order is deleted!","id":order.order_id},status=status.HTTP_200_OK)
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)

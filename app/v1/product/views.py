@@ -144,9 +144,9 @@ class ProductView(APIView):
             except Product.DoesNotExist:
                 raise exceptions.NotExists(detail="Product doesn't exists!")
             
-            name=product.name
-            product.delete()
-            return Response({"message":f"Product {name} is deleted!"},status=status.HTTP_200_OK)
+            product.is_active=False
+            product.save()
+            return Response({"message":f"Product {product.name} is deleted!"},status=status.HTTP_200_OK)
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
@@ -246,8 +246,8 @@ class ProductTypeView(APIView):
             except Product.DoesNotExist:
                 raise exceptions.NotExists(detail="Product Type doesn't exists!")
             
-            name=product_type.name
-            product_type.delete()
-            return Response({"message":f"Product Type {name} is deleted!"},status=status.HTTP_200_OK)
+            product_type.is_active=False
+            product_type.save()
+            return Response({"message":f"Product Type {product_type.name} is deleted!"},status=status.HTTP_200_OK)
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)

@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.hashers import make_password,check_password
 from utils import exceptions
+from .model_manager import ActiveManager,AdminManager
 
 class OTP(models.Model):
     user_id=models.CharField(max_length=255,unique=True)
@@ -24,6 +25,8 @@ class Organization(models.Model):
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)
 
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
 
     def save(self, *args, **kwargs):
         self.name=self.name.upper()
@@ -38,6 +41,9 @@ class Role(models.Model):
     organization=models.ForeignKey(Organization,on_delete=models.CASCADE,related_name='organization_roles',null=True,blank=True)
     created_at=models.DateTimeField(default=datetime.now())
     is_active=models.BooleanField(default=1)
+
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
     
     def __str__(self) -> str:
         return self.name
@@ -51,6 +57,9 @@ class PaymentMode(models.Model):
     organization=models.ForeignKey(Organization,on_delete=models.CASCADE,related_name='organization_payment_modes')
     name=models.CharField(max_length=50)
     is_active=models.BooleanField(default=1)
+
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
 
     def __str__(self) -> str:
         return self.name
@@ -80,6 +89,9 @@ class Employee(models.Model):
     verified_at=models.DateTimeField(null=True,blank=True)
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)
+
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
 
     def __str__(self) -> str:
         return self.name
@@ -112,6 +124,9 @@ class Customer(models.Model):
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)
 
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
+
     def __str__(self) -> str:
         return self.name
     
@@ -127,6 +142,9 @@ class ProductType(models.Model):
     is_active=models.BooleanField(default=1)
     created_at=models.DateTimeField(default=datetime.now())
     updated_at=models.DateTimeField(null=True,blank=True)
+
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
 
     def clean(self) -> None:
         if self.name and ProductType.objects.filter(name=self.name).exists() and ProductType.objects.get(name=self.name).p_type_id!=self.p_type_id:
@@ -154,6 +172,9 @@ class Product(models.Model):
     added_at=models.DateTimeField(default=datetime.now())
     updated_at=models.DateTimeField(null=True,blank=True)
 
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
+
     def __str__(self) -> str:
         return self.name
     
@@ -175,6 +196,9 @@ class Order(models.Model):
     order_date=models.DateTimeField(default=datetime.now())
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)
+
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
 
     def __str__(self) -> str:
         return f"Product : {self.product.name} for Customer : {self.customer.name}"
@@ -209,6 +233,9 @@ class Billing(models.Model):
     billing_date=models.DateTimeField(default=datetime.now())
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)
+
+    objects = ActiveManager()
+    admin_objects = AdminManager() 
 
     def __str__(self) -> str:
         return f"Billing For : {self.customer.name} at : {self.billing_date}"

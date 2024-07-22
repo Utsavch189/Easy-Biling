@@ -1,5 +1,5 @@
 from django.urls import path
-from app.v1.employee.views import EmployeeView,GetAllEmployeeView
+from app.v1.employee.views import EmployeeView
 from app.v1.auths.views import (
     RegisterView,
     LoginView,
@@ -14,7 +14,6 @@ from app.v1.billing.views import BillingView
 
 urlpatterns=[
     path('employee',EmployeeView.as_view()),
-    path('employee/get-all',GetAllEmployeeView.as_view()),
     path('auth/register',RegisterView.as_view()),
     path('auth/login',LoginView.as_view()),
     path('auth/refresh-token',RefreshTokenView.as_view()),

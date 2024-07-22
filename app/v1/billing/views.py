@@ -26,6 +26,16 @@ class BillingView(APIView):
             data=BillingOutWithCustSerializer(instance=bill).data
 
             return Response({"billing":data},status=status.HTTP_200_OK)
+        
+        if 'invoice-id' in query_params:
+            try:
+                bill=Billing.objects.get(invoice=query_params['invoice-id'])
+            except Billing.DoesNotExist:
+                raise exceptions.NotExists(detail="bill doesn't exists!")
+            
+            data=BillingOutWithCustSerializer(instance=bill).data
+
+            return Response({"billing":data},status=status.HTTP_200_OK)
             
 
         if not ('page-size' in query_params and 'page' in query_params):
@@ -175,7 +185,8 @@ class BillingView(APIView):
                 bill=Billing.objects.get(bill_id=data.get('bill_id'))
             except Billing.DoesNotExist:
                 raise exceptions.NotExists(detail="bill doesn't exists!")
-            bill.delete()
-            return Response({"message":"bill is deleted!"},status=status.HTTP_200_OK)
+            bill.is_active=False
+            bill.save()
+            return Response({"message":"bill is deleted!","id":bill.bill_id},status=status.HTTP_200_OK)
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)
