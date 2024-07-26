@@ -193,6 +193,8 @@ class Order(models.Model):
     customer=models.ForeignKey(Customer,on_delete=models.DO_NOTHING,related_name='customer_order')
     product=models.ForeignKey(Product,on_delete=models.DO_NOTHING,related_name='product_order')
     quantity=models.IntegerField()
+    price=models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True)
+    discount=models.DecimalField(max_digits=10, decimal_places=2,default=0,null=True,blank=True)
     order_date=models.DateTimeField(default=datetime.now())
     is_active=models.BooleanField(default=1)
     updated_at=models.DateTimeField(null=True,blank=True)

@@ -76,6 +76,7 @@ class BillingView(APIView):
             with transaction.atomic():
                 billing_price=0
                 discount=0
+                discounted_price=0
                 orders=[]
 
                 try:
@@ -110,9 +111,9 @@ class BillingView(APIView):
 
                     billing_price+=order.quantity*product.price
                 
-                    discount+=order.quantity*product.discount if product.discount else 0
+                    discount+=order.discount
 
-                discounted_price=(billing_price-((billing_price*discount)/100)) if discount else billing_price
+                    discounted_price+=order.price
                 
                 try:
                     gst_rates=GSTRates.objects.get(pk=1)

@@ -20,6 +20,7 @@ class OrderInSerializer(serializers.Serializer):
     customer_phone=serializers.CharField(required=False)
     product_id=serializers.CharField()
     quantity=serializers.IntegerField()
+    discount=serializers.DecimalField(max_digits=10, decimal_places=2,required=False)
 
 class OrderUpdateSerializer(serializers.Serializer):
     order_id=serializers.CharField()
@@ -27,6 +28,8 @@ class OrderUpdateSerializer(serializers.Serializer):
     customer_phone=serializers.CharField(required=False)
     product_id=serializers.CharField()
     quantity=serializers.IntegerField()
+    discount=serializers.DecimalField(max_digits=10, decimal_places=2)
+    price=serializers.DecimalField(max_digits=10, decimal_places=2)
 
 class OrderDeleteSerializer(serializers.Serializer):
     order_id=serializers.CharField()
@@ -43,6 +46,8 @@ class OrderOutSerializer(serializers.ModelSerializer):
             'organization',
             'product',
             'customer',
+            'discount',
+            'price',
             'quantity',
             'order_date',
             'is_active',
@@ -59,6 +64,8 @@ class OrderOutWithoutCustSerializer(serializers.ModelSerializer):
             'order_id',
             'organization',
             'product',
+            'discount',
+            'price',
             'quantity',
             'order_date',
             'is_active',

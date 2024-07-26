@@ -23,22 +23,13 @@ class BillingInSerializer(serializers.Serializer):
     orders=OrderForInBills(many=True)
     customer_id=serializers.CharField()
     payment_mode=serializers.CharField()
-    discount=serializers.DecimalField(max_digits=10, decimal_places=2,required=False)
     is_inter_state=serializers.BooleanField(default=False)
 
     def validate(self, attrs):
         if not attrs.get('discount'):
             attrs['discount']=0
         return attrs
-    
 
-class BillingUpdateSerializer(serializers.Serializer):
-    bill_id=serializers.CharField()
-    customer_id=serializers.CharField()
-    payment_mode=serializers.CharField()
-    discount=serializers.DecimalField(max_digits=10, decimal_places=2)
-    total_amount=serializers.DecimalField(max_digits=10, decimal_places=2)
-    discounted_price=serializers.DecimalField(max_digits=10, decimal_places=2)
 
 class BillingDeleteSerializer(serializers.Serializer):
     bill_id=serializers.CharField()

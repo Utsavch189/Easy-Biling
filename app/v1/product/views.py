@@ -51,7 +51,7 @@ class ProductView(APIView):
         
         data=ProductOutSerializer(instance=product,many=True).data
 
-        return Response({"products":data},status=status.HTTP_200_OK)
+        return Response({"products":data,"total_product":products.count()},status=status.HTTP_200_OK)
 
     @is_authorize(role=['ADMIN','MANAGER'])
     def post(self,request):

@@ -50,7 +50,7 @@ class OrderView(APIView):
         
         data=OrderOutSerializer(instance=order,many=True).data
 
-        return Response({"orders":data},status=status.HTTP_200_OK)
+        return Response({"orders":data,"total":orders.count()},status=status.HTTP_200_OK)
     
     @is_authorize(role=['ADMIN','MANAGER'])
     def post(self,request):
@@ -87,7 +87,9 @@ class OrderView(APIView):
                         organization=Organization.objects.get(org_id=token_data.get('org_id')),
                         customer=customer,
                         product=product,
-                        quantity=_order.get('quantity')
+                        quantity=_order.get('quantity'),
+                        discount=_order.get('discount') if _order.get('discount') else _order.get('quantity')*product.discount,
+                        price=(_order.get('quantity')*product.price)-(((_order.get('quantity')*product.price)*_order.get('discount'))/100) if _order.get('discount') else (_order.get('quantity')*product.price)-(((_order.get('quantity')*product.price)*product.discount)/100)
                     )
                     order.save()
                     orders.append(order)
@@ -132,6 +134,8 @@ class OrderView(APIView):
             order.customer=customer
             order.product=product
             order.quantity=data.get('quantity')
+            order.discount=data.get('discount')
+            order.price=data.get('price')
             order.updated_at=datetime.now()
             order.save()
 
