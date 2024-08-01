@@ -4,7 +4,6 @@ from app.serializers.order import OrderOutSerializer,OrderOutWithoutCustSerializ
 from app.serializers.billing import BillingOutSerializer
 
 class CustomerInSerializer(serializers.Serializer):
-    org_id=serializers.CharField()
     name=serializers.CharField()
     mobile=serializers.CharField()
     email=serializers.EmailField(required=False)
@@ -15,18 +14,22 @@ class CustomerInSerializer(serializers.Serializer):
             data['email']=""
         if not data.get('address'):
             data['address']=""
+        data['name']=data['name'].upper()
         return data
 
 class CustomerUpdateSerializer(serializers.Serializer):
     cust_id=serializers.CharField()
-    org_id=serializers.CharField()
     name=serializers.CharField()
     mobile=serializers.CharField()
     email=serializers.EmailField(required=False)
+    address=serializers.CharField(required=False)
 
     def validate(self, data):
         if not data.get('email'):
             data['email']=""
+        if not data.get('address'):
+            data['address']=""
+        data['name']=data['name'].upper()
         return data
 
 class CustomerDeleteSerializer(serializers.Serializer):
@@ -41,7 +44,6 @@ class CustomerOutSerializer(serializers.ModelSerializer):
         model=Customer
         fields=(
             'cust_id',
-            'organization',
             'name',
             'mobile',
             'email',

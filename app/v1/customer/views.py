@@ -20,10 +20,16 @@ class CustomerView(APIView):
                 customer=Customer.objects.get(cust_id=query_params['customer-id'])
             except Customer.DoesNotExist:
                 raise exceptions.NotExists(detail="customer doesn't exists!")
+        
+        elif 'customer-mobile' in query_params:
+            try:
+                customer=Customer.objects.get(mobile=query_params['customer-mobile'])
+            except Customer.DoesNotExist:
+                raise exceptions.NotExists(detail="customer doesn't exists!")
             
             data=CustomerOutSerializer(instance=customer,many=False).data
-            return Response({"customer":data},status=status.HTTP_200_OK)
-
+            return Response({"customer":data,"exists":True},status=status.HTTP_200_OK)
+        
         if not ('page-size' in query_params and 'page' in query_params):
             raise exceptions.GenericException(
                 detail="pass page and page-size in query params!",
@@ -40,7 +46,7 @@ class CustomerView(APIView):
             _customer=[]
         
         data=CustomerOutSerializer(instance=_customer,many=True).data
-        return Response({"customers":data},status=status.HTTP_200_OK)
+        return Response({"customers":data,"total_customers":customers.count()},status=status.HTTP_200_OK)
 
         
         
@@ -66,6 +72,7 @@ class CustomerView(APIView):
             customer.name=data.get('name')
             customer.mobile=data.get('mobile')
             customer.email=data.get('email')
+            customer.address=data.get('address')
             customer.updated_at=datetime.now()
             customer.save()
 

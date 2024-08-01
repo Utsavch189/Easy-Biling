@@ -11,6 +11,7 @@ class CustomerSerializer(serializers.ModelSerializer):
             'cust_id',
             'name',
             'mobile',
+            'address',
             'email',
             'registered_at',
             'is_active',
@@ -38,7 +39,7 @@ class BillingOutSerializer(serializers.ModelSerializer):
 
     billed_by=EmployeeOutSerializer()
     payment_mode=PaymentModeOutSerializer()
-    associate_orders=BillForOrdersSerializer(source='billing_mapping')
+    associate_orders=BillForOrdersSerializer(source='billing_mapping',many=True)
 
     class Meta:
         model=Billing

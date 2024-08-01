@@ -10,6 +10,7 @@ class CustomerSerializer(serializers.ModelSerializer):
             'name',
             'mobile',
             'email',
+            'address',
             'registered_at',
             'is_active',
             'updated_at'

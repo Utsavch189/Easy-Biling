@@ -50,7 +50,7 @@ class OrderView(APIView):
         
         data=OrderOutSerializer(instance=order,many=True).data
 
-        return Response({"orders":data,"total":orders.count()},status=status.HTTP_200_OK)
+        return Response({"order":data,"total":orders.count()},status=status.HTTP_200_OK)
     
     @is_authorize(role=['ADMIN','MANAGER'])
     def post(self,request):
@@ -95,7 +95,7 @@ class OrderView(APIView):
                     orders.append(order)
 
             data=OrderOutSerializer(instance=orders,many=True).data
-            return Response({"orders":data},status=status.HTTP_201_CREATED)
+            return Response({"order":data},status=status.HTTP_201_CREATED)
 
         else:
             return Response({"message":serializer.errors},status=status.HTTP_422_UNPROCESSABLE_ENTITY)

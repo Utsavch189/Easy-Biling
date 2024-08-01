@@ -62,6 +62,7 @@ class RegisterView(APIView):
             }
 
             tokens=JwtBuilder(payload=jwt_payload).get_token()
+            return Response({"message":"registered!","token":tokens if tokens else {},"user":user},status=status.HTTP_201_CREATED)
         
         elif user_type=="customer":
             serializer=CustomerInSerializer(data=data)
@@ -84,8 +85,7 @@ class RegisterView(APIView):
 
             customer.save()
             user=CustomerOutSerializer(instance=customer).data
-
-        return Response({"message":"registered!","token":tokens if tokens else {},"user":user},status=status.HTTP_201_CREATED)
+            return Response({"message":"registered!","token":tokens if tokens else {},"customer":user},status=status.HTTP_201_CREATED)
 
 class LoginView(APIView):
 
