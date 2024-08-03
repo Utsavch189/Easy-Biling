@@ -13,6 +13,7 @@ from app.v1.order.views import OrderView
 from app.v1.billing.views import BillingView
 from app.v1.customer.views import CustomerView
 from app.v1.me.views import MeView
+from app.v1.paymentmodes.views import PaymentModeView
 
 urlpatterns=[
     path('employee',EmployeeView.as_view()),
@@ -29,5 +30,6 @@ urlpatterns=[
     path('order',OrderView.as_view()),
     path('billing',BillingView.as_view()),
     path('customer',CustomerView.as_view()),
-    path('me',MeView.as_view())
+    path('me',MeView.as_view()),
+    path('payment-mode',PaymentModeView.as_view())
 ]

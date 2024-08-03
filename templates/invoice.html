@@ -152,7 +152,7 @@
                     <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Product</td>
                     <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Quantity</td>
                     <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Unit Price</td>
-                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Discount</td>
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Order Discount</td>
                     <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Total</td>
                 </tr>
                 {% for order in associate_orders %}
@@ -160,7 +160,7 @@
                         <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">{{order.product_name}}</td>
                         <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">{{order.quantity}}</td>
                         <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">{{order.product_per_price}}</td>
-                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">{{order.product_per_discount}}%</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">{{order.order_discount}}%</td>
                         <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">{{order.total_price}}</td>
                     </tr>
                 {% endfor %}

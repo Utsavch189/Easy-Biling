@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            background-color: #f7fafc;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .invoice-box {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .title h1 {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .my-8 {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .border-b-2 {
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .font-bold {
+            font-weight: bold;
+        }
+        .total .font-bold {
+            font-size: 1.25em;
+        }
+        .mt-8 {
+            margin-top: 2rem;
+        }
+        .bg-gray-100 {
+            background-color: #f7fafc;
+        }
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-box" style="max-width: 800px; margin: 40px auto; padding: 20px; background-color: #ffffff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr class="top">
+                    <td colspan="2" style="padding-bottom: 20px;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td class="title">
+                                    <h1 style="font-size: 2em; font-weight: bold;">Easy-Billing</h1>
+                                </td>
+                                <td class="text-right" style="text-align: right;">
+                                    <span class="block">Invoice #: INV1722677887963</span>
+                                    <br>
+                                    <span class="block">Created: 03-08-2024</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr class="information my-8" style="margin-top: 2rem; margin-bottom: 2rem;">
+                    <td colspan="2" style="padding-bottom: 20px;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                    <strong>Organization:</strong><br>
+                                    CAFE ADDA<br>
+                                    Kalna
+                                </td>
+                                <td class="text-right" style="text-align: right;">
+                                    <strong>Billed To:</strong><br>
+                                    SAYAN CHATTERJEE<br>
+                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr class="heading">
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Payment Method</td>
+                </tr>
+
+                <tr class="details">
+                    <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">CASH AND UPI</td>
+                </tr>
+
+                <tr class="heading">
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Description</td>
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Amount</td>
+                </tr>
+
+                <tr class="item">
+                    <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">Total Amount</td>
+                    <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">560.00 rs.</td>
+                </tr>
+
+                <tr class="item">
+                    <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">Discount (3.00%)</td>
+                    <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">551.00 rs.</td>
+                </tr>
+
+                
+                    <tr class="item">
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">CGST (2.50%)</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">13.78 rs.</td>
+                    </tr>
+                    <tr class="item">
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">SGST (2.50%)</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">13.78 rs.</td>
+                    </tr>
+                
+                <br>
+                <tr class="total">
+                    <td></td>
+                    <td class="py-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; font-weight: bold;">Total Include Tax : 578.55 rs.</td>
+                </tr>
+            </table>
+
+            <table class="items mt-3" style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <tr class="heading bg-gray-100" style="background-color: #f7fafc;">
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Product</td>
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Quantity</td>
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Unit Price</td>
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Order Discount</td>
+                    <td class="py-2 border-b-2 font-bold" style="padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">Total</td>
+                </tr>
+                
+                    <tr class="item">
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">PANIR SATE</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">2</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">40.00</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">0.00%</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">80.00</td>
+                    </tr>
+                
+                    <tr class="item">
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">PANIR PASINDA</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">6</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">50.00</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">3.00%</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">291.00</td>
+                    </tr>
+                
+                    <tr class="item">
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">CHICKEN</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">1</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">180.00</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">0.00%</td>
+                        <td class="py-2" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">180.00</td>
+                    </tr>
+                
+            </table>
+        </div>
+    </div>
+</body>
+</html>

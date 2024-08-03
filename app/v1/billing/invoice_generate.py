@@ -41,8 +41,8 @@ class Invoice:
                 "total_incl_tax":round(bill.taxable_amount,2),
                 "associate_orders":[
                     {"product_name":order.product.name,"quantity":order.quantity,
-                     "product_per_price":round(order.product.price,2),"product_per_discount":round(order.product.discount,2),
-                     "total_price":round(order.quantity*((order.product.price-((order.product.price*order.product.discount)/100)) if order.product.discount else order.product.price),2)
+                     "product_per_price":round(order.product.price,2),"order_discount":round(order.discount,2),
+                     "total_price":round(order.price,2)
                     } for order in orders
                 ]
             }
